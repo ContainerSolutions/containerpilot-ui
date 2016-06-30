@@ -1,0 +1,26 @@
+{
+  "name": "Container_Solution",
+  "version": "1.0.0",
+  "homepage": "",
+  "authors": [
+    ""
+  ],
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "requirejs": "~2.1.18",
+    "socket.io-client": "^1.4.6",
+    "d3": "^3.5.17",
+    "jquery": "^3.0.0",
+    "object-hash": "^1.1.2"
+  }
+}

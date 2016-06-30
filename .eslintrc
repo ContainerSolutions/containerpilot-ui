@@ -1,0 +1,10 @@
+{
+  "extends": "google",
+  "rules": {
+    "indent": [2, 4]
+  },
+  "env": {
+    "node": true,
+    "mocha": true
+  }
+}

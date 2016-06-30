@@ -1,0 +1,52 @@
+{
+  "name": "container-solutions",
+  "version": "1.0.0",
+  "description": "SPA GUI based on data from Consul and Docker",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "lint": "eslint src",
+    "test": "set NODE_ENV=test mocha src/**/*.spec.js",
+    "coverage": "NODE_ENV=test istanbul cover _mocha 'src/**/*.spec.js'"
+  },
+  "pre-push": [
+    "lint",
+    "test"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://git.thinkmobiles.com:9000/web/Container_Solutions.git"
+  },
+  "author": "oleksijfomin",
+  "license": "ISC",
+  "dependencies": {
+    "async": "2.0.0-rc.6",
+    "bluebird": "3.4.0",
+    "body-parser": "1.15.1",
+    "consul": "0.25.0",
+    "docker-remote-api": "4.4.1",
+    "express": "4.13.4",
+    "fs": "0.0.2",
+    "lodash": "4.13.1",
+    "method-override": "2.3.6",
+    "socket.io": "1.4.6",
+    "winston": "2.2.0"
+  },
+  "devDependencies": {
+    "chai": "3.5.0",
+    "eslint": "2.12.0",
+    "eslint-config-google": "0.5.0",
+    "istanbul": "0.4.3",
+    "mocha": "2.5.3",
+    "nock": "8.0.0",
+    "node-inspector": "0.12.8",
+    "pre-push": "0.1.1",
+    "sinon": "1.17.4",
+    "sinon-chai": "2.8.0",
+    "socket.io-client": "1.4.6",
+    "supertest": "1.2.0"
+  },
+  "engines": {
+    "node": "4.2.4"
+  }
+}

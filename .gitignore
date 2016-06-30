@@ -1,0 +1,7 @@
+.idea/
+.git/
+node_modules/
+src/public/js/libs
+bower_components/
+coverage/
+npm-debug.log
