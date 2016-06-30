@@ -1,0 +1,97 @@
+[
+  {
+    "Info": {
+      "Node": "634a6b8c5f35",
+      "Address": "172.17.0.2"
+    },
+    "HealthChecks": [],
+    "Services": [
+      {
+        "ID": "consul",
+        "Service": "consul",
+        "Tags": [],
+        "Address": "",
+        "Port": 8300,
+        "HealthChecks": [
+          {
+            "Node": "634a6b8c5f35",
+            "CheckID": "serfHealth",
+            "Name": "Serf Health Status",
+            "Status": "passing",
+            "Notes": "",
+            "Output": "Agent alive and reachable",
+            "ServiceID": "",
+            "ServiceName": ""
+          },
+          {
+            "Node": "634a6b8c5f35",
+            "CheckID": "mysql-backup-run",
+            "Name": "mysql-backup-run",
+            "Status": "passing",
+            "Notes": "",
+            "Output": "",
+            "ServiceID": "",
+            "ServiceName": ""
+          }
+        ]
+      },
+      {
+        "ID": "mysql-026133d39143",
+        "Service": "mysql",
+        "Tags": null,
+        "Address": "172.17.0.6",
+        "Port": 3306,
+        "HealthChecks": [
+          {
+            "Node": "634a6b8c5f35",
+            "CheckID": "mysql-026133d39143",
+            "Name": "mysql-026133d39143",
+            "Status": "passing",
+            "Notes": "TTL for mysql set by containerpilot",
+            "Output": "ok",
+            "ServiceID": "mysql-026133d39143",
+            "ServiceName": "mysql"
+          }
+        ]
+      },
+      {
+        "ID": "mysql-29a7984bd3dc",
+        "Service": "mysql",
+        "Tags": null,
+        "Address": "172.17.0.7",
+        "Port": 3306,
+        "HealthChecks": [
+          {
+            "Node": "634a6b8c5f35",
+            "CheckID": "mysql-026133d39143",
+            "Name": "mysql-026133d39143",
+            "Status": "passing",
+            "Notes": "TTL for mysql set by containerpilot",
+            "Output": "ok",
+            "ServiceID": "mysql-026133d39143",
+            "ServiceName": "mysql"
+          }
+        ]
+      },
+      {
+        "ID": "mysql-primary-3e9730335bd6",
+        "Service": "mysql-primary",
+        "Tags": null,
+        "Address": "172.17.0.5",
+        "Port": 3306,
+        "HealthChecks": [
+          {
+            "Node": "634a6b8c5f35",
+            "CheckID": "mysql-primary-3e9730335bd6",
+            "Name": "mysql-primary-3e9730335bd6",
+            "Status": "passing",
+            "Notes": "TTL for mysql-primary set by containerpilot",
+            "Output": "ok",
+            "ServiceID": "mysql-primary-3e9730335bd6",
+            "ServiceName": "mysql-primary"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -11,6 +11,18 @@ More summary be available later...
 ```
     npm install
 ```
+* And then install bower:
+
+```
+    npm install -g bower
+```
+
+* And then install packages for web:
+
+```
+    bower install
+```
+
 
 * And then start server with:
 

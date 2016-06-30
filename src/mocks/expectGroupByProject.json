@@ -1,0 +1,46 @@
+[
+  {
+    "project": "mysql",
+    "name": "mysql",
+    "containers": [
+      {
+        "Id": "29a7984bd3dcf845f7340a22d3c15f48579133d34b25bb3e61074efea8ddaf34",
+        "Command": "containerpilot mysqld --console --log-bin=mysql-bin --log_slave_updates=ON --gtid-mode=ON --enforce-gtid-consistency=ON",
+        "Labels": {
+          "com.docker.compose.project": "mysql",
+          "com.docker.compose.service": "mysql"
+        }
+      },
+      {
+        "Id": "026133d391436e14cbad44077895a27377c676bafcdf4421bc736d80f115e625",
+        "Command": "containerpilot mysqld --console --log-bin=mysql-bin --log_slave_updates=ON --gtid-mode=ON --enforce-gtid-consistency=ON",
+        "Labels": {
+          "com.docker.compose.project": "mysql",
+          "com.docker.compose.service": "mysql"
+        }
+      },
+      {
+        "Id": "3e9730335bd6c60d829461542ecfd4631164e66fb7778a1a8e326e1ed20d6e68",
+        "Command": "containerpilot mysqld --console --log-bin=mysql-bin --log_slave_updates=ON --gtid-mode=ON --enforce-gtid-consistency=ON",
+        "Labels": {
+          "com.docker.compose.project": "mysql",
+          "com.docker.compose.service": "mysql"
+        }
+      }
+    ]
+  },
+  {
+    "project": "mysql",
+    "name": "consul",
+    "containers": [
+      {
+        "Id": "4d3b5a555186161532a6f5b4ed57285218ed8e77bb5fb94ff0aaa3171446b85f",
+        "Command": "containerpilot mysqld --console --log-bin=mysql-bin --log_slave_updates=ON --gtid-mode=ON --enforce-gtid-consistency=ON",
+        "Labels": {
+          "com.docker.compose.project": "mysql",
+          "com.docker.compose.service": "consul"
+        }
+      }
+    ]
+  }
+]
