@@ -3,34 +3,284 @@
 <head>
     <meta charset="UTF-8">
     <title>Container Pilot GUI Prototype</title>
-    <style>
-        div.tooltip {
-            position: absolute;
-            text-align: center;
-            width: 200px;
-            /*height: 100px;*/
-            padding: 2px;
-            font: 16px sans-serif;
-            background: #EBD2CE;
-            border: 0px;
-            border-radius: 8px;
-            pointer-events: none;
-        }
 
-        .leaf circle {
-            fill: #ff7f0e;
-            fill-opacity: .05;
-        }
-    </style>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+
+    <!--<script src="./js/libs/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>-->
     <script data-main="js/main" src="./js/libs/requirejs/require.js"></script>
+
+    <link rel="stylesheet" href="./js/libs/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css"/>
+    <link rel="stylesheet" href="./css/style.css"/>
 </head>
 
 <body>
-    <div id="c">
-     <!--   <button id="redrawAdd">ADD!!!</button>-->
-       <!-- <button id="redrawRemove">REMOVE Container animation!!!</button>-->
+
+<div class="sidebar mCustomScrollbar">
+
+    <div class="close"><img src="../img/close-err.svg" alt="close"/></div>
+
+    <div class="logo_block">
+        <img src="../img/logo.svg" alt="logo"/>
+
+        <div class="main_title">Container pilot</div>
+
     </div>
-    <div id="wrapper"></div>
+
+    <div class="single_item cluster_block">
+        <a href="#" class="cluster">Cluster name</a>
+    </div>
+
+    <div class="single_item">
+        <a href="#">Services</a>
+        <a href="#">MySQL <span class="status blue"></span></a>
+
+
+
+    </div>
+
+    <div class="info_block">
+        <span>type: database</span>
+        <p class="less">
+            all kinds of other info
+            about tehe service
+        </p>
+
+        <span class="less_btn">less...</span>
+        <span class="more_btn">more...</span>
+
+    </div>
+
+    <div class="containers">
+
+        <div class="container_title">
+            Containers
+        </div>
+
+        <ul class="container_list">
+
+            <li>
+                <a href="javascript:;">
+                    <span><img src="../img/replica-ok.svg" class="svg-icon" alt="standby"/></span>
+
+                    <span class="title">mysql-primary</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="javascript:;">
+                    <span><img src="../img/replica-ok.svg" class="svg-icon" alt="standby"/></span>
+
+                    <span class="title">mysql-replica</span>
+                </a>
+            </li>
+
+
+            <li>
+                <a href="javascript:;">
+                    <span><img src="../img/replica.svg" class="svg-icon" alt="standby"/></span>
+
+                    <span class="title">mysql-replica</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="javascript:;">
+                    <span><img src="../img/replica-att.svg" class="svg-icon" alt="standby"/></span>
+
+                    <span class="title">mysql-standby</span>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+
+    <div class="single_item">
+        <a href="#">Mongo DB
+            <span class="status orange"></span>
+        </a>
+
+
+    </div>
+
+    <div class="info_block">
+        <span>type: database</span>
+        <p>
+            all kinds of other info
+            about tehe service
+        </p>
+
+        <span class="less_btn">less...</span>
+        <span class="more_btn">more...</span>
+
+    </div>
+
+    <div class="containers">
+        <ul class="container_list">
+
+            <li>
+
+                <a href="javascript:;">
+                    <span><img src="../img/mongo-ok.svg" class="svg-icon" alt="standby"/></span>
+
+                    <span class="title">mongodb</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="javascript:;">
+                    <span><img src="../img/mongo-ok.svg" class="svg-icon" alt="standby"/></span>
+
+                    <span class="title">mongodb</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="javascript:;">
+                    <span><img src="../img/mongo.svg" class="svg-icon" alt="standby"/></span>
+
+                    <span class="title">mongodb</span>
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+
+
+</div>
+
+<div class="loader"></div>
+
+
+<!-----------------DROP-DOWN----------------------->
+
+<div class="drop_down">
+    <div class="drop_down_inner">
+
+        <div class="close"><img src="../img/close.svg" alt="close"/></div>
+
+        <div class="title">ID: <span>9eac656aad97</span></div>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th colspan="3">CP script</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+                <td>event</td>
+                <td>action</td>
+                <td></td>
+            </tr>
+
+
+            <tr>
+                <td>preStart</td>
+                <td>action</td>
+                <td><button class="btn">script</button></td>
+            </tr>
+
+            <tr>
+                <td>health</td>
+                <td>action</td>
+                <td><button class="btn">script</button></td>
+            </tr>
+
+            <tr>
+                <td>onChange</td>
+                <td>action</td>
+                <td><button class="btn">script</button></td>
+            </tr>
+
+            <tr>
+                <td>preStop</td>
+                <td>action</td>
+                <td><button class="btn">script</button></td>
+            </tr>
+
+            <tr>
+                <td>postStop</td>
+                <td>action</td>
+                <td><button class="btn">script</button></td>
+            </tr>
+
+            </tbody>
+
+        </table>
+
+        <button class="btn">Log file</button>
+
+    </div>
+</div>
+
+
+<div class="svg_wrapper">
+</div>
+
+
+<svg id="defs">
+    <defs>
+        <g id="el_1">
+            <circle cx="0" cy="0" r="15" fill="#30C7A0"></circle>
+            <!-- <circle fill="none" stroke="#000000" stroke-width="9" stroke-miterlimit="23"
+                     stroke-dasharray="1.0048,6.0288" cx="0" cy="0" r="23"></circle>
+             <circle fill="none" stroke="#000000" stroke-width="9" stroke-miterlimit="23"
+                     stroke-dasharray="1.0048,6.0288" cx="0" cy="0" r="23"
+                     transform="rotate(6,0,0)"></circle>
+             <circle fill="none" stroke="#000000" stroke-width="9" stroke-miterlimit="23"
+                     stroke-dasharray="1.0048,6.0288" cx="0" cy="0" r="23"
+                     transform="rotate(12,0,0)"></circle>-->
+            <path d="M -8 -3 L 0 7 L 8 -8" stroke="#fff" stroke-width="2" fill="none"></path>
+        </g>
+    </defs>
+    <defs>
+        <g id="el_2">
+            <circle cx="0" cy="0" r="15" fill="#30C7A0" stroke="#fff" stroke-width="2"></circle>
+            <!-- <circle fill="none" stroke="#000000" stroke-width="9" stroke-miterlimit="23"
+                     stroke-dasharray="1.0048,6.0288" cx="0" cy="0" r="23"></circle>-->
+            <path d="M -8 -3 L 0 7 L 8 -8" stroke="#fff" stroke-width="2" fill="none"></path>
+        </g>
+    </defs>
+    <defs>
+        <g id="el_3">
+            <circle cx="0" cy="0" r="15" fill="#C4334C" stroke="#fff" stroke-width="2"></circle>
+            <!--<circle fill="none" stroke="#000000" stroke-width="9" stroke-miterlimit="23"
+                    stroke-dasharray="1.0048,6.0288" cx="0" cy="0" r="23"></circle>-->
+            <path d="M -8 -8 L 8 8" stroke="#fff" stroke-width="2" fill="none"></path>
+            <path d="M -8 8 L 8 -8" stroke="#fff" stroke-width="2" fill="none"></path>
+        </g>
+    </defs>
+    <defs>
+        <g id="el_4">
+            <circle cx="0" cy="0" r="15" fill="#C6BB32" stroke="#fff" stroke-width="2"></circle>
+            <!--<circle fill="none" stroke="#000000" stroke-width="9" stroke-miterlimit="23"
+                    stroke-dasharray="1.0048,6.0288" cx="0" cy="0" r="23"></circle>-->
+            <circle cx="0" cy="9" r="2" fill="#fff"></circle>
+            <path d="M 0 -11 L 0 4" stroke="#fff" stroke-width="2" fill="none"></path>
+        </g>
+    </defs>
+    <defs>
+        <g id="el_5">
+            <circle cx="0" cy="0" r="15" fill="#30C7A0" stroke="#fff" stroke-width="2"></circle>
+            <!-- <circle fill="none" stroke="#666666" stroke-width="2" cx="0" cy="0" r="24"></circle>-->
+            <path d="M -8 -3 L 0 7 L 8 -8" stroke="#fff" stroke-width="2" fill="none"></path>
+            <!-- <ellipse cx="0" cy="-23" rx="8" ry="6" fill="#666666" transform="rotate(15,0,0)"></ellipse>
+             <ellipse cx="0" cy="-23" rx="8" ry="6" fill="#666666" transform="rotate(87,0,0)"></ellipse>
+             <ellipse cx="0" cy="-23" rx="8" ry="6" fill="#666666"
+                      transform="rotate(159,0,0)"></ellipse>
+             <ellipse cx="0" cy="-23" rx="8" ry="6" fill="#666666"
+                      transform="rotate(231,0,0)"></ellipse>
+             <ellipse cx="0" cy="-23" rx="8" ry="6" fill="#666666"
+                      transform="rotate(303,0,0)"></ellipse>-->
+        </g>
+    </defs>
+</svg>
+
+<!--<script>
+    $('.sidebar').mCustomScrollbar();
+</script>-->
 
 </body>
 
