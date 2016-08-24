@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="50px" height="50px" viewBox="0 0 50 50" enable-background="new 0 0 50 50" xml:space="preserve">
+<symbol  id="warning" viewBox="-11.047 -11.047 22.094 22.094">
+	<path fill="#C7BC32" d="M11.047,0c0-6.101-4.946-11.047-11.047-11.047S-11.047-6.101-11.047,0S-6.101,11.047,0,11.047
+		S11.047,6.101,11.047,0z"/>
+	<g>
+		
+			<line fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="0" y1="7.266" x2="-0.085" y2="-1.641"/>
+		<path fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+			M0.562-6.032c0-0.357-0.29-0.647-0.647-0.647s-0.647,0.29-0.647,0.647s0.29,0.647,0.647,0.647S0.562-5.674,0.562-6.032z"/>
+	</g>
+</symbol>
+<g>
+	
+		<circle fill="none" stroke="#60696B" stroke-width="6" stroke-miterlimit="10" stroke-dasharray="2.0539,5.1347" cx="25.122" cy="24.889" r="19.455"/>
+</g>
+<use xlink:href="#warning"  width="22.094" height="22.094" x="-11.047" y="-11.047" transform="matrix(1 0 0 -1 25.0352 24.8496)" overflow="visible"/>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+</svg>
