@@ -1,0 +1,10 @@
+FROM node:slim
+RUN apt-get update && apt-get install -yq git
+VOLUME /pilot-ui
+WORKDIR /pilot-ui
+ENV NODE_ENV=production
+CMD npm install && \
+    npm install -g bower && \
+    bower install --allow-root && \
+    npm start
+EXPOSE 3000
