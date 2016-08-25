@@ -2,13 +2,16 @@
 
 define([
     'jQuery',
+    'mCustomScrollbar',
     'd3',
     'io',
-    'helpers/coordCounter',
-    'helpers/animation',
+    'hash',
+    'helpers/renderCircles',
+    'helpers/parseServerData',
+    'helpers/additionalRender',
     'helpers/groupsState',
     'constants'
-], function ($, d3, io,  Counter, Animation, GroupsState, Constants) {
+], function ($, mCustomScrollbar, d3, io, hash, Counter, Parser, AdditionalRender, GroupsState, Constants) {
     var initialize = function () {
         var socketURL = window.location.origin;
         var options = {
@@ -48,16 +51,14 @@ define([
             });
         }
 
-
-
         //$('.sidebar').mCustomScrollbar();
-        getServerData();
+        //getServerData();
 
         /* socketClient.on('logs:push', function (data) {
          alert(data.data);
          });*/
 
-        //setInterval(getServerData, 3000);
+        setInterval(getServerData, 3000);
 
         //function showLogs(containerId, area) {
         function showLogs(containerId, area) {
@@ -69,191 +70,29 @@ define([
             });
         }
 
+        //drawElements();
+
         function drawElements(data) {
             var serverData = data;
-            var height = 1800;
-            var sidebarDx = 233;
-            var isDrawn = true;
+            var additionalRender = new AdditionalRender.AdditionalRender();
+            //var serverData = Constants.TEST_SERVER_DATA;
+            var width = $('.svg_wrapper').width() - 17;
+            var $sideBarItem = $('.container_list li');
+            var colorShema = Constants.GROUP_COLORS;
+            var keys = Object.keys(serverData);
+            var $closeBtn = $('.close');
             var isSidebarOpen = false;
             var mainCirclesDots = [];
+            var sidebarDx = 233;
+            var isDrawn = true;
+            var height = 1800;
             var dx = 0;
             var dy = 0;
-            var svg;
-            var width = $('.svg_wrapper').width() - 17;
-            var controlItemsData = [];
-            var dataset = {
-                nodes: [],
-                edges: []
-            };
-            var $sideBarItem = $('.container_list li');
-            var keys = Object.keys(serverData);
-            var servDataLength = keys.length;
-            var $closeBtn = $('.close');
-            var groupsCount = [];
-            var counter = 0;
-            var subGroupCounter = 0;
-            var controlObj;
-            var nodeEl;
             var node;
-            var m;
+            var svg;
             var g;
-            var i;
-            var r;
-            var j;
-            var checkpoints = [];
 
-            function connectCheckPoints(checkpoints) {
-
-                for(i = checkpoints.length; i--;){
-
-                    for(j = checkpoints.length; j--;){
-
-                        if(!(dataset.nodes[checkpoints[i]].name === dataset.nodes[checkpoints[j]].name)){
-
-                            var edgeObj = {
-                                source: dataset.nodes[checkpoints[i]].name,
-                                target: dataset.nodes[checkpoints[j]].name,
-                                type: 0
-                            };
-
-                            if(dataset.nodes[checkpoints[i]].megagroup === dataset.nodes[checkpoints[j]].megagroup){
-                                edgeObj.type = 1;
-                            }
-
-                            dataset.edges.push(edgeObj)
-                        }
-                    }
-                }
-            }
-
-            function connectSubgroupPoints (checkpoints){
-
-                for(var i = checkpoints.length; i--;){
-
-                    for(j = checkpoints.length; j--;) {
-
-                        if (!(dataset.nodes[checkpoints[i]].name === dataset.nodes[checkpoints[j]].name)) {
-
-                            var edgeObj = {
-                                source: dataset.nodes[checkpoints[i]].name,
-                                target: dataset.nodes[checkpoints[j]].name,
-                                type  : 0
-                            };
-                        }
-
-                        if(edgeObj){
-                            dataset.edges.push(edgeObj);
-                        }
-                    }
-                }
-            }
-
-            function bindNodeListeners(deltaX){
-
-                node.on('mouseenter', function () {
-                    var el = d3.select(this).attr('data-id');
-                    var xLocation = d3.select(this).node().getBBox().x;
-                    var yLocation = d3.select(this).node().getBBox().y;
-                    var dropDownWidth = parseInt($('.drop_down').width()) / 1.2;
-
-                    d3.select('circle.shade_' + el)
-                        .transition()
-                        .attr('opacity', 1);
-
-                    d3.select('.drop_down')
-                        .style({
-                            'left': (xLocation + dx + deltaX + dropDownWidth) + 'px',
-                            'top' : (yLocation + dy + 20) + 'px'
-                        });
-
-                    d3.select('.drop_down')
-                        .transition()
-                        .duration(500)
-                        .style({
-                            'opacity'   : 1,
-                            'visibility': 'visible'
-                        });
-
-                    $('.drop_down .title span').text(d3.select(this).datum().consulId)
-                })
-                    .on('mouseleave', function () {
-                        var el = d3.select(this).attr('data-id');
-                        d3.select('circle.shade_' + el)
-                            .transition()
-                            .attr('opacity', 0);
-                    });
-            }
-
-            for (i = servDataLength; i--;) {
-
-                groupsCount.push(serverData[keys[i]].length);
-
-                controlObj = {
-                    name: serverData[keys[i]][0].name,
-                    type: 'el_2',
-                    info: '#6558DC'
-                };
-
-                for(j = serverData[keys[i]].length; j--;){
-
-                    for(m = serverData[keys[i]][j].containers.length; m--;){
-
-                        nodeEl = {
-                            sbCountId: subGroupCounter,
-                            isCheckPoint: false,
-                            name        : counter,
-                            consulId    : serverData[keys[i]][j].containers[m].ConsulId,
-                            type        : "el_2",
-                            group       : j,
-                            megagroup   : i,
-                            shadow      : '#F15A24',
-                            info        : '#6558DC',
-                            text        : serverData[keys[i]][j].name + " replica"
-                        };
-
-                        if(m === 0){
-                            nodeEl.isCheckPoint = true;
-                        }
-
-                        dataset.nodes.push(nodeEl);
-                        counter++;
-                    }
-
-                    subGroupCounter++;
-                }
-
-                controlItemsData.push(controlObj);
-            }
-
-            for(i = dataset.nodes.length; i--;){
-
-                if(dataset.nodes[i].isCheckPoint){
-
-                    checkpoints.push(i);
-                }
-            }
-
-            connectCheckPoints(checkpoints);
-            checkpoints = [];
-
-            for(i = subGroupCounter; i--;){
-
-                checkpoints.push([]);
-            }
-
-            for(j = dataset.nodes.length; j--;){
-
-                var sbIndex = dataset.nodes[j].sbCountId;
-
-                (checkpoints[sbIndex]).push(j)
-            }
-
-            for(i = checkpoints.length; i--;){
-
-                connectSubgroupPoints(checkpoints[i])
-            }
-
-            function renderAll() {
+            function renderAll(dataset, controlItemsData, groupsCount) {
                 var shadowNode;
                 var infoNode;
                 var infoPath;
@@ -262,274 +101,11 @@ define([
                 var edges;
                 var g;
 
-                function drawCircles() {
-                    var subDots = [];
-                    var dotsForRadius;
-                    var oneCircleDots;
-                    var $selection;
-                    var $select;
-                    var xMin;
-                    var yMin;
-                    var xMax;
-                    var yMax;
-                    var j;
-                    var x;
-                    var y;
-                    var i;
-                    var t;
-
-                    function countRadius(d) {
-                        var centerDotsDistance = [];
-                        var maxDist;
-                        var dist0;
-                        var dist1;
-                        var dist2;
-                        var dist3;
-                        var i;
-
-                        function sortDist(a, b) {
-                            if (a > b) {
-                                return 1;
-                            }
-                            if (a < b) {
-                                return -1;
-                            }
-                        }
-
-                        for (i = d.allDots.length; i--;) {
-
-                            dist0 = Math.sqrt(Math.pow(d.allDots[i].x - d.x, 2) + Math.pow(d.allDots[i].y - d.y, 2));
-                            dist1 = Math.sqrt(Math.pow(d.allDots[i].x + 25 - d.x, 2) + Math.pow(d.allDots[i].y - d.y, 2));
-                            dist2 = Math.sqrt(Math.pow(d.allDots[i].x - d.x, 2) + Math.pow(d.allDots[i].y + 25 - d.y, 2));
-                            dist3 = Math.sqrt(Math.pow(d.allDots[i].x + 25 - d.x, 2) + Math.pow(d.allDots[i].y + 25 - d.y, 2));
-                            centerDotsDistance.push(parseInt(dist0));
-                            centerDotsDistance.push(parseInt(dist1));
-                            centerDotsDistance.push(parseInt(dist2));
-                            centerDotsDistance.push(parseInt(dist3));
-                        }
-
-                        maxDist = centerDotsDistance.sort(sortDist)[centerDotsDistance.length - 1];
-
-                        return maxDist;
-                    }
-
-                    mainCirclesDots = [];
-                    groupsCount.reverse();
-
-                    for (i = groupsCount.length; i--;) {
-
-                        for (j = groupsCount[i]; j--;) {
-                            dotsForRadius = [];
-                            oneCircleDots = {x: [], y: []};
-
-                            $select = $('.group_' + i + '.subgroup_' + j);
-
-                            $select.each(function () {
-                                x = +$(this).attr('x') + 23;
-                                y = +$(this).attr('y') + 23;
-
-                                dotsForRadius.push({
-                                    x: x,
-                                    y: y
-                                });
-                                oneCircleDots.x.push(x);
-                                oneCircleDots.y.push(y);
-                                oneCircleDots.x.push(x);
-                                oneCircleDots.y.push(y);
-                            });
-
-                            oneCircleDots.x.sort();
-                            oneCircleDots.y.sort();
-
-                            xMin = oneCircleDots.x.sort()[0] - 83;
-                            yMin = oneCircleDots.y.sort()[0] - 83;
-                            xMax = oneCircleDots.x.sort()[oneCircleDots.y.length - 1];
-                            yMax = oneCircleDots.y.sort()[oneCircleDots.y.length - 1];
-
-                            if(yMax){
-                                subDots.push({
-                                    allDots: dotsForRadius,
-                                    x      : xMin + (xMax - xMin) / 2,
-                                    y      : yMin + (yMax - yMin) / 2,
-                                    type   : 'circle_' + i
-                                });
-                            }
-                        }
-                    }
-
-                    d3.select('g.group').selectAll('.subCircle')
-                        .data(subDots)
-                        .enter()
-                        .append('circle')
-                        .attr({
-                            'class'       : function (d) {
-                                return d.type;
-                            },
-                            'cx'          : function (d) {
-                                return d.x;
-                            },
-                            'cy'          : function (d) {
-                                return d.y * 1.05;
-                            },
-                            'r'           : function (d) {
-                                return countRadius(d)
-                            },
-                            'stroke'      : '#666666',
-                            'stroke-width': 2,
-                            'fill'        : 'none',
-                            'opacity'     : 0
-                        });
-
-                    for (i = groupsCount.length; i--;) {
-
-                        $selection = $('.circle_' + i);
-
-                        if ($selection.length > 1) {
-
-                            $selection.each(function () {
-
-                                d3.select(this)
-                                    .transition()
-                                    .delay(1000)
-                                    .attr({'opacity': 1})
-                                    .style({'stroke-dasharray': ('15, 20')});
-                            })
-                        } else {
-                            mainCirclesDots.push({
-                                x: parseFloat($selection.attr('cx')),
-                                y: parseFloat($selection.attr('cy')),
-                                r: parseFloat($selection.attr('r'))
-                            });
-
-                            d3.select($selection).remove();
-                        }
-                    }
-
-                    $('.line_1').each(function () {
-
-                        x = [$(this).attr('x1'), $(this).attr('x2')].sort();
-                        y = [$(this).attr('y1'), $(this).attr('y2')].sort();
-
-                        mainCirclesDots.push({
-                            x: +x[0] + (+x[1] - x[0]) / 2,
-                            y: +y[0] + (+y[1] - y[0]) / 2,
-                            r: Math.sqrt((+x[1] - x[0]) * (+x[1] - x[0]) + (+y[1] - y[0]) * (+y[1] - y[0])) * 1.12
-                        })
-                    });
-
-                    for (t = mainCirclesDots.length; t--;) {
-
-                        if(controlItemsData[t]){
-                            mainCirclesDots[t].name = controlItemsData[t].name;
-                        } else {
-                            mainCirclesDots[t].name = '';
-                        }
-                    }
-
-                    d3.select('g.group')
-                        .selectAll('.mainCircle')
-                        .data(mainCirclesDots)
-                        .enter()
-                        .append('circle')
-                        .attr({
-                            'cx'          : function (d) {
-                                return d.x;
-                            },
-                            'cy'          : function (d) {
-                                return d.y;
-                            },
-                            'r'           : function (d) {
-                                return d.r;
-                            },
-                            'stroke'      : '#666666',
-                            'stroke-width': 2,
-                            'fill'        : 'none',
-                            'opacity'     : 0
-                        })
-                        .transition()
-                        .attr('opacity', 1);
-
-                    d3.select('g.group').selectAll('path.label')
-                        .data(mainCirclesDots)
-                        .enter()
-                        .append('path')
-                        .attr({
-                            'd'    : function (d, i) {
-                                return 'M ' + (parseFloat(d.x) - parseFloat(d.r) - 10) + ',' + d.y + ' A ' + parseFloat(d.r) + ',' + parseFloat(d.r) + ' 0 0,1 ' + (parseFloat(d.x) + parseFloat(d.r) + 10) + ',' + d.y;
-                            },
-                            'id'   : function (d, i) {
-                                return 'circle_text_path_' + i;
-                            },
-                            'class': 'label',
-                            fill   : 'none'
-                        });
-
-                    d3.select('g.group')
-                        .selectAll('.text')
-                        .data(mainCirclesDots)
-                        .enter()
-                        .append('text')
-                        .append('textPath')
-                        .attr({
-                            'xlink:href': function (d, i) {
-                                return '#circle_text_path_' + i;
-                            },
-                            'class'     : 'mainCircleLabel'
-                        })
-                        .style('text-anchor', 'left')
-                        .attr('startOffset', '15%')
-                        .text(function (d) {
-                            return d.name;
-                        });
-
-                    var overX = d3.select('g.group').node().getBBox().x;
-                    var overY = d3.select('svg#mySvg').node().getBBox().y;
-                    var heightDelta = d3.select('g.group').node().getBBox().height - d3.select('svg#mySvg').node().attributes.height.value;
-
-                    d3.select('g.group').selectAll('.textId')
-                        .data(dataset.nodes)
-                        .enter()
-                        .append('text')
-                        .append('textPath')
-                        .attr({
-                            'xlink:href': function (d) {
-                                return '#id_path_' + d.name;
-                            },
-                            'class'     : 'idLabel'
-                        })
-                        .style('text-anchor', 'middle')
-                        .attr('startOffset', '75%')
-                        .text(function (d) {
-                            return d.consulId;
-                        })
-                        .style({
-                            'font-size': 9
-                        });
-
-                    if (heightDelta > 0) {
-                        height += (heightDelta) * 1.2;
-                    }
-
-                    dx = -overX;
-                    dy = -overY;
-
-                    d3.select('g.group')
-                        .transition()
-                        .attr({
-                            transform: 'translate(' + (dx + 50) + ',' + (dy + 20) + ')'
-                        });
-
-                    bindNodeListeners(0);
-                    renderInfoText(dx, dy);
-                    renderControls(mainCirclesDots, dx, dy);
-                }
-
                 svg = d3.select('.svg_wrapper')
                     .append('svg')
                     .attr({
                         id: 'mySvg'
-                    })
-                    .on('click', showContainers);
+                    });
 
                 g = svg
                     .attr({
@@ -548,10 +124,10 @@ define([
 
                         if (!(d.source.megagroup === d.target.megagroup)) {
 
-                            return 700;
+                            return 900;
                         } else if (!(d.source.group === d.target.group)) {
 
-                            return 500;
+                            return 650;
                         }
 
                         return 100;
@@ -561,16 +137,14 @@ define([
 
                 group = g.append('g')
                     .attr({
-                        'class'     : 'group',
-                        'opacity'   : 0,
-                        'visibility': 'hidden'
+                        'class'     : 'group'
                     });
 
                 edges = group.selectAll("line")
                     .data(dataset.edges)
                     .enter()
                     .append('line')
-                    .style("stroke", "#ccc");
+                    .style('stroke', '#ccc');
 
                 infoPath = group
                     .selectAll('.id_path')
@@ -597,7 +171,18 @@ define([
                     .append('use');
 
                 force.on('end', function () {
-                    drawCircles()
+                    Counter.drawCircles(dataset, height, groupsCount, controlItemsData, colorShema, keys, function(callback){
+                        mainCirclesDots = callback.mainCirclesDots;
+                        dx = callback.dx;
+                        dy = callback.dy;
+                        height = callback.height;
+
+                        bindNodeListeners(0);
+                        additionalRender.renderInfoText(dx, dy);
+                        additionalRender.renderControls(controlItemsData, mainCirclesDots, dx, dy, function(callback){
+                            isDrawn = callback;
+                        });
+                    })
                 });
 
                 force.on('tick', function (opt) {
@@ -614,8 +199,12 @@ define([
                         'id'   : function (d) {
                             return 'id_path_' + d.name;
                         },
-                        'class': 'id_label',
-                        fill   : 'none'
+                        'class': function(d){
+                            return d.belongTo + ' id_label'
+                        },
+                        'fill': 'none',
+                        'opacity'   : 0,
+                        'visibility': 'hidden'
                     });
 
                     infoNode.attr({
@@ -630,27 +219,29 @@ define([
                             return d.info;
                         },
                         'class'  : function (d, i) {
-                            return 'info_holder info_' + d.type + '_' + i;
+                            return d.belongTo + ' info_holder info_' + d.type + '_' + i;
                         },
-                        'opacity': 1
+                        'opacity'   : 0,
+                        'visibility': 'hidden'
                     });
 
-                    shadowNode.attr({
-                        'cx'     : function (d) {
-                            return d.x;
-                        },
-                        'cy'     : function (d) {
-                            return d.y;
-                        },
-                        'r'      : 24,
-                        'fill'   : function (d) {
-                            return d.shadow;
-                        },
-                        'class'  : function (d, i) {
-                            return 'shade_' + d.type + '_' + i;
-                        },
-                        'opacity': 0
-                    });
+                    /* shadowNode.attr({
+                     'cx'     : function (d) {
+                     return d.x;
+                     },
+                     'cy'     : function (d) {
+                     return d.y;
+                     },
+                     'r'      : 24,
+                     'fill'   : function (d) {
+                     return d.shadow;
+                     },
+                     'class'  : function (d, i) {
+                     return d.belongTo + ' shade_' + d.type + '_' + i;
+                     },
+                     'opacity'   : 0,
+                     'visibility': 'hidden'
+                     });*/
 
                     edges
                         .attr({
@@ -667,10 +258,10 @@ define([
                                 return d.target.y;
                             },
                             'class': function (d) {
-                                return 'line_' + d.type;
+                                return d.belongTo + ' line_' + d.type;
                             }
                         })
-                        .style('opacity', 0.5);
+                        .style('opacity', 0);
 
                     node
                         .attr({
@@ -678,7 +269,7 @@ define([
                                 return '#' + d.type;
                             },
                             'class'     : function (d) {
-                                return 'node group_' + d.megagroup + ' subgroup_' + d.group;
+                                return d.belongTo + ' node group_' + d.megagroup + ' subgroup_' + d.group;
                             },
                             'data-id'   : function (d, i) {
                                 return d.type + '_' + i;
@@ -688,45 +279,47 @@ define([
                             },
                             'y'         : function (d) {
                                 return d.y;
-                            }
+                            },
+                            'opacity'   : 0,
+                            'visibility': 'hidden'
                         })
 
                 });
             }
 
-            function renderInfoText(dx, dy){
-                var $infoCircles = $('.info_holder');
-                var infoArray = [];
+            function bindNodeListeners(deltaX){
 
-                $infoCircles.each(function () {
-                    var circle = d3.select(this);
+                node.on('mouseenter', function () {
+                        var el = d3.select(this).attr('data-id');
+                        var xLocation = d3.select(this).node().getBBox().x;
+                        var yLocation = d3.select(this).node().getBBox().y;
+                        var dropDownWidth = parseInt($('.drop_down').width()) / 1.2;
 
-                    infoArray.push({
-                        left: parseFloat(circle.node().getBBox().x) + parseFloat(dx) + 119,
-                        top: parseFloat(circle.node().getBBox().y) + parseFloat(dy) + 42,
-                        text: circle.datum().text
-                    })
-                });
+                        d3.select('circle.shade_' + el)
+                            .transition()
+                            .attr('opacity', 1);
 
-                d3.select('.svg_wrapper')
-                    .selectAll('.divText')
-                    .data(infoArray)
-                    .enter()
-                    .append('div')
-                    .attr({
-                        'class': 'nodeInfoText'
+                        d3.select('.drop_down')
+                            .style({
+                                'left': (xLocation + dx + deltaX + 180) + 'px',
+                                'top' : (yLocation + dy + 20) + 'px'
+                            });
+
+                        d3.select('.drop_down')
+                            .transition()
+                            .duration(500)
+                            .style({
+                                'opacity'   : 1,
+                                'visibility': 'visible'
+                            });
+
+                        $('.drop_down .title_id span').text(d3.select(this).datum().consulId)
                     })
-                    .style({
-                        'top': function(d){
-                            return (d.top) + 'px';
-                        },
-                        'left': function(d){
-                            return (d.left) + 'px';
-                        },
-                        'display': 'none'
-                    })
-                    .html(function(d){
-                        return d.text;
+                    .on('mouseleave', function () {
+                        var el = d3.select(this).attr('data-id');
+                        d3.select('circle.shade_' + el)
+                            .transition()
+                            .attr('opacity', 0);
                     });
             }
 
@@ -767,42 +360,47 @@ define([
                     });
             }
 
-            function hideContainers(){
+            function hideContainers(e){
+                var $target = $(e.target);
+                var type = $target.attr('data-type');
 
+                $target.addClass('hide');
+                $target.parent().find('.more_btn').removeClass('hide');
                 hideDropDown();
 
-                d3.select('.svg_wrapper')
-                    .selectAll('div')
+                d3.selectAll('.' + type + '.nodeInfoText')
                     .style({
                         'display': 'none'
                     });
 
-                d3.selectAll('.controlCircle')
+                d3.selectAll('.controlCircle#' + type)
                     .transition()
                     .attr({
                         'opacity': 1,
                         'visibility': 'display-block'
                     });
 
-                d3.selectAll('.controlLabel')
+                d3.selectAll('.' + type + '.controlLabel')
                     .transition()
                     .attr({
                         'opacity': 1,
                         'visibility': 'display-block'
                     });
 
-                d3.select('g.group')
+                d3.selectAll('g.group .' + type)
                     .transition()
                     .attr({
                         'opacity': 0,
                         'visibility': 'hidden'
                     });
-
-                svg
-                    .on('click', showContainers)
             }
 
-            function showContainers(){
+            function showContainers(e){
+                var $target = $(e.target);
+                var type = $target.attr('data-type');
+
+                $target.addClass('hide');
+                $target.parent().find('.less_btn').removeClass('hide');
 
                 if(!isDrawn){
                     return;
@@ -810,135 +408,32 @@ define([
 
                 hideDropDown();
 
-                d3.select('.svg_wrapper')
-                    .selectAll('div')
+                d3.selectAll('.' + type + '.nodeInfoText')
                     .transition()
                     .style({
                         'display': 'block'
                     });
 
-                d3.selectAll('.controlCircle')
+                d3.selectAll('.controlCircle#' + type)
                     .transition()
                     .attr({
                         'opacity': 0,
                         'visibility': 'hidden'
                     });
 
-                d3.selectAll('.controlLabel')
+                d3.selectAll('.' + type + '.controlLabel')
                     .transition()
                     .attr({
                         'opacity': 0,
                         'visibility': 'hidden'
                     });
 
-                d3.select('g.group')
+                d3.selectAll('g.group .' + type)
                     .transition()
                     .attr({
                         'opacity': 1,
                         'visibility': 'display-block'
                     });
-
-                svg
-                    .on('click', hideContainers)
-
-            }
-
-            function renderControls(dots, dx, dy){
-                var controlGroup;
-
-                controlGroup = d3.select('svg.main')
-                    .append('g')
-                    .attr({
-                        'id': 'controls'
-                    });
-
-                controlGroup.selectAll('.controlCircle')
-                    .data(controlItemsData)
-                    .enter()
-                    .append('circle')
-                    .attr({
-                        'class': 'controlCircle',
-                        'id': function(d){
-                            return d.name;
-                        },
-                        'cx': function(d, i){
-                            return dots[i].x;
-                        },
-                        'cy': function(d, i){
-                            return dots[i].y;
-                        },
-                        'r': 100,
-                        'fill': function(d){
-                            return d.info;
-                        },
-                        'transform': function(d,i){
-
-                            return 'translate(' + (dx + dots[i].r*0.6 - 70 + 50) + ',' + (dy - dots[i].r*0.8 + 70 + 20) + ')';
-                        }
-                    });
-
-                controlGroup.selectAll('path')
-                    .data(controlItemsData)
-                    .enter()
-                    .append('path')
-                    .attr({
-                        'd': function(d, i){
-                            return 'M ' + (parseInt(dots[i].x) - 110) + ',' + dots[i].y + ' A 105,105 0 0,1 ' + (parseInt(dots[i].x) + 110) + ',' + dots[i].y;
-                        },
-                        'transform': function(d,i){
-
-                            return 'translate(' + (dx + dots[i].r*0.6 - 70 + 50) + ',' + (dy - dots[i].r*0.8 + 70 + 20) + ')';
-                        },
-                        'id': function(d, i){
-                            return 'text_path_' + i;
-                        },
-                        fill: 'none'
-                    });
-
-                controlGroup
-                    .selectAll('.text')
-                    .data(controlItemsData)
-                    .enter()
-                    .append('text')
-                    .append('textPath')
-                    .attr({
-                        'xlink:href': function (d, i) {
-                            return '#text_path_' + i;
-                        },
-                        'class': 'controlLabel',
-                        'transform': function(d,i){
-
-                            return 'translate(' + (dx + dots[i].r*0.6 - 70 + 50) + ',' + (dy - dots[i].r*0.8 + 70 + 20) + ')';
-                        }
-                    })
-                    .style('text-anchor', 'left')
-                    .attr('startOffset', '15%')
-                    .text(function (d) {
-                        return d.name;
-                    });
-
-                controlGroup.selectAll('.controlNode')
-                    .data(controlItemsData)
-                    .enter()
-                    .append('use')
-                    .attr({
-                        'class': 'controlNode',
-                        'xlink:href': function (d) {
-                            return '#' + d.type;
-                        },
-                        'x'         : function (d, i){
-                            return dots[i].x;
-                        },
-                        'y'         : function (d, i){
-                            return dots[i].y;
-                        },
-                        'transform': function(d,i){
-                            return 'translate(' + (dx + dots[i].r*0.6 + 50) + ',' + (dy - dots[i].r*0.8 + 20) + ')';
-                        }
-                    });
-
-                isDrawn = true;
-                $('.loader').hide();
             }
 
             function openBar(e){
@@ -958,7 +453,12 @@ define([
                 $('.sidebar').addClass('active');
                 $('.svg_wrapper').addClass('side_active');
                 isSidebarOpen = true;
-                width = width - 400;
+                width = width - 223;
+                svg
+                    .attr({
+                        height: height,
+                        width : width
+                    })
             }
 
             function closeBar(){
@@ -977,19 +477,31 @@ define([
                 $('.sidebar').removeClass('active');
                 $('.svg_wrapper').removeClass('side_active');
                 isSidebarOpen = false;
-                width = width + 400;
+                width = width + 223;
+                svg
+                    .attr({
+                        height: height,
+                        width : width
+                    })
             }
 
-            renderAll();
+            Parser.parseData(serverData, colorShema, function(response){
+                var dataset = response.dataset;
+                var controlItemsData = response.controlItemsData;
+                var groupsCount = response.groupsCount;
+
+                renderAll(dataset, controlItemsData, groupsCount);
+                additionalRender.renderSidebar(serverData, colorShema);
+            });
 
             $closeBtn.click(closeBar);
             $closeBtn.click(hideDropDown);
             $('.sidebar').on('mouseover', openBar);
             $sideBarItem.on('mouseenter', showDropDown);
             $sideBarItem.on('mouseleave', hideDropDown);
+            $('.more_btn').click(showContainers);
+            $('.less_btn').click(hideContainers);
         }
-        
-        //drawElements();
     };
 
     return {

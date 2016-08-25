@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Container Pilot GUI Prototype</title>
 
-    <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,700,700i" rel="stylesheet">
 
     <!--<script src="./js/libs/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>-->
     <script data-main="js/main" src="./js/libs/requirejs/require.js"></script>
@@ -17,7 +17,7 @@
 
 <div class="sidebar mCustomScrollbar">
 
-    <div class="close"><img src="../img/close-err.svg" alt="close"/></div>
+    <div class="close"><img src="../img/close.svg" alt="close"/></div>
 
     <div class="logo_block">
         <img src="../img/logo.svg" alt="logo"/>
@@ -30,11 +30,10 @@
         <a href="#" class="cluster">Cluster name</a>
     </div>
 
-    <div class="single_item">
-        <a href="#">Services</a>
-        <a href="#">MySQL <span class="status blue"></span></a>
+    <!--<div class="single_item">
+        <div>Services</div>
 
-
+        <a href="#">MySQL <span class="status"></span></a>
 
     </div>
 
@@ -45,12 +44,12 @@
             about tehe service
         </p>
 
-        <span class="less_btn">less...</span>
+        <span class="less_btn hide">less...</span>
         <span class="more_btn">more...</span>
 
     </div>
 
-    <div class="containers">
+    <div class="containers hide">
 
         <div class="container_title">
             Containers
@@ -96,7 +95,7 @@
 
     <div class="single_item">
         <a href="#">Mongo DB
-            <span class="status orange"></span>
+            <span class="status"></span>
         </a>
 
 
@@ -109,7 +108,7 @@
             about tehe service
         </p>
 
-        <span class="less_btn">less...</span>
+        <span class="less_btn hide">less...</span>
         <span class="more_btn">more...</span>
 
     </div>
@@ -125,6 +124,7 @@
                     <span class="title">mongodb</span>
                 </a>
             </li>
+
 
             <li>
                 <a href="javascript:;">
@@ -144,7 +144,7 @@
 
         </ul>
 
-    </div>
+    </div>-->
 
 
 </div>
@@ -159,64 +159,29 @@
 
         <div class="close"><img src="../img/close.svg" alt="close"/></div>
 
-        <div class="title">ID: <span>9eac656aad97</span></div>
+        <div class="title_id">ID: <span>9eac656aad97</span></div>
 
-        <table class="table">
-            <thead>
-            <tr>
-                <th colspan="3">CP script</th>
-            </tr>
-            </thead>
+        <div class="title">Container pilot script</div>
 
-            <tbody>
-            <tr>
-                <td>event</td>
-                <td>action</td>
-                <td></td>
-            </tr>
+        <a href="javascript:;" class="btn btn_blue">onStart</a>
+        <a href="javascript:;" class="btn btn_health"></a>
+        <a href="javascript:;" class="btn btn_blue pre">preStop</a>
+        <a href="javascript:;" class="btn btn_blue post">postStop</a>
+        <a href="javascript:;" class="btn btn_dark">onChange</a>
 
-
-            <tr>
-                <td>preStart</td>
-                <td>action</td>
-                <td><button class="btn">script</button></td>
-            </tr>
-
-            <tr>
-                <td>health</td>
-                <td>action</td>
-                <td><button class="btn">script</button></td>
-            </tr>
-
-            <tr>
-                <td>onChange</td>
-                <td>action</td>
-                <td><button class="btn">script</button></td>
-            </tr>
-
-            <tr>
-                <td>preStop</td>
-                <td>action</td>
-                <td><button class="btn">script</button></td>
-            </tr>
-
-            <tr>
-                <td>postStop</td>
-                <td>action</td>
-                <td><button class="btn">script</button></td>
-            </tr>
-
-            </tbody>
-
-        </table>
-
-        <button class="btn">Log file</button>
+        <div class="drop_bottom">
+            <button class="btn_orange">Log file</button>
+        </div>
 
     </div>
 </div>
 
 
 <div class="svg_wrapper">
+
+
+
+
 </div>
 
 

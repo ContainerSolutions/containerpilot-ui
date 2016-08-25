@@ -1,12 +1,14 @@
 "use strict";
 
+var App = {};
+
 require.config({
     paths: {
-        'd3'                : './libs/d3/d3.min',
-        'io'                : './libs/socket.io-client/socket.io',
-        'hash'              : './libs/object-hash/dist/object_hash',
-        mCustomScrollbar     : './libs/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min',
-        'jQuery'            : './libs/jquery/dist/jquery.min'
+        d3                : './libs/d3/d3.min',
+        io                : './libs/socket.io-client/socket.io',
+        hash              : './libs/object-hash/dist/object_hash',
+        jQuery            : './libs/jquery/dist/jquery.min',
+        'mCustomScrollbar': './libs/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar'
     },
     shim : {
         'jQuery'          : {
@@ -21,8 +23,9 @@ require.config({
         'io'              : {
             exports: 'io'
         },
-
-        'app': ['jQuery', 'hash', 'd3', 'io']
+        'mCustomScrollbar': {
+            deps: ['jQuery']
+        }
     }
 });
 
