@@ -56,15 +56,22 @@ by default server will be available at ` http://localhost:3000 `
 ```
 
 ## Fiddle with it locally.
-1. Start a Consul container.
+
+1. Clone the wordpress git repo.
   ```
-    docker run --name consul -p 127.0.0.1:8500:8500 -d  gliderlabs/consul agent -ui -server -bootstrap -data-dir=/tmp/data  -client=0.0.0.0
+  git clone https://github.com/autopilotpattern/wordpress.git
   ```
-2. Get the Consul IP address:
+2. Run docker-compose.
+  ```
+  cd wordpress
+  docker-compose -f local-compose.yml up
+  ```
+
+3. Get the Consul IP address:
    ```
-   export CONSUL_API_HOST=`docker inspect  -f '{{.NetworkSettings.Networks.bridge.IPAddress}}' consul`; echo $CONSUL_API_HOST
+   export CONSUL_API_HOST=`docker inspect  -f '{{.NetworkSettings.Networks.bridge.IPAddress}}' wordpress_consul_1`; echo $CONSUL_API_HOST
    ```
-2. Build & run containerpilot-ui container.
+4. Build & run containerpilot-ui container.
   ```
     docker build -t containerpilot-ui . && docker run --rm -t -i -e CONSUL_API_HOST="$CONSUL_API_HOST" -v /var/run/docker.sock:/var/run/docker.sock -p 3000:3000 containerpilot-ui 
   ```
